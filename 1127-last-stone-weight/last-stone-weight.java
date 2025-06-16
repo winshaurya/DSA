@@ -11,11 +11,11 @@ class Solution {
            if (p.size()==0) p.add(0);
         }
         else { 
-            p.add(Math.abs(a-b));
+            p.add(Math.abs(a- b));
         }
 
     
        }
-       return p.poll();
+       return p.poll() ;
     }
 }
