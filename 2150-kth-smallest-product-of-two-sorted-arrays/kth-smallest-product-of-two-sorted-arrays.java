@@ -1,52 +1,57 @@
 class Solution {
-    public long kthSmallestProduct(int[] nums1, int[] nums2, long k) {
-        long left = (long) -1e10 - 1;
-        long right = (long) 1e10 + 1;
-        long ans = right;
+  public long kthSmallestProduct(int[] nums1, int[] nums2, long k) {
+    List<Integer> A1 = new ArrayList<>();
+    List<Integer> A2 = new ArrayList<>();
+    List<Integer> B1 = new ArrayList<>();
+    List<Integer> B2 = new ArrayList<>();
 
-        while (left <= right) {
-            long mid = left + (right - left) / 2;
-            if (countLessEqual(nums1, nums2, mid) >= k) {
-                ans = mid;
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return ans;
+    seperate(nums1, A1, A2);
+    seperate(nums2, B1, B2);
+
+    final long negCount = A1.size() * B2.size() + A2.size() * B1.size();
+    int sign = 1;
+
+    if (k > negCount) {
+      k -= negCount;
+    } else {
+      k = negCount - k + 1;
+      sign = -1;
+      List<Integer> temp = B1;
+      B1 = B2;
+      B2 = temp;
     }
 
-    private long countLessEqual(int[] nums1, int[] nums2, long val) {
-        long count = 0;
-        for (int x : nums1) {
-            if (x == 0) {
-                if (val >= 0) count += nums2.length;
-                continue;
-            }
+    long l = 0;
+    long r = (long) 1e10;
 
-            int low = 0, high = nums2.length - 1;
-            int currentIdx = (x > 0) ? -1 : nums2.length;
-
-            while (low <= high) {
-                int mid = low + (high - low) / 2;
-                if ((long) x * nums2[mid] <= val) {
-                    if (x > 0) {
-                        currentIdx = mid;
-                        low = mid + 1;
-                    } else {
-                        currentIdx = mid;
-                        high = mid - 1;
-                    }
-                } else {
-                    if (x > 0) {
-                        high = mid - 1;
-                    } else {
-                        low = mid + 1;
-                    }
-                }
-            }
-            count += (x > 0) ? (currentIdx + 1) : (nums2.length - currentIdx);
-        }
-        return count;
+    while (l < r) {
+      final long m = (l + r) / 2;
+      if (numProductNoGreaterThan(A1, B1, m) + numProductNoGreaterThan(A2, B2, m) >= k)
+        r = m;
+      else
+        l = m + 1;
     }
+
+    return sign * l;
+  }
+
+  private void seperate(int[] arr, List<Integer> A1, List<Integer> A2) {
+    for (final int a : arr)
+      if (a < 0)
+        A1.add(-a);
+      else
+        A2.add(a);
+    Collections.reverse(A1);
+  }
+
+  private long numProductNoGreaterThan(List<Integer> A, List<Integer> B, long m) {
+    long count = 0;
+    int j = B.size() - 1;
+    for (final long a : A) {
+      while (j >= 0 && a * B.get(j) > m)
+        --j;
+      count += j + 1;
+    }
+    return count;
+  }
 }
