@@ -1,33 +1,16 @@
 class Solution {
     public int[] maxSubsequence(int[] nums, int k) {
-        int n = nums.length;
-        int[] sorted = Arrays.copyOf(nums, n);
-
-        Arrays.sort(sorted);
-
-        int threshold = sorted[n - k];
-        int thresholdCnt = 0;
-        for (int i = n - k; i < n; i++) {
-            if (sorted[i] == threshold) {
-                thresholdCnt++;
-            }
+        int [][] a = new int [nums.length][2];
+        int [] ans = new int [k];
+        for (int i = 0 ; i < nums.length; i++){
+            a[i][0]= i;
+            a[i][1]=nums[i];
         }
-
-        int[] ans = new int[k];
-
-        int p = 0;
-        for (int num : nums) {
-            if (num > threshold) {
-                ans[p++] = num;
-            } else if (num == threshold && thresholdCnt > 0) {
-                ans[p++] = num;
-                thresholdCnt--;
-            }
-            if (p== k) {
-                break;
-            }
+        Arrays.sort(a ,(x,y)-> Integer.compare(y[1],x[1]));
+        Arrays.sort(a,0,k,(x,y)-> Integer.compare(x[0],y[0]));
+        for (int i = 0 ; i < k; i++){
+            ans[i] = a[i][1];
         }
-
         return ans;
     }
 }
