@@ -12,10 +12,7 @@ class Solution {
             if (endTime[n - i - 1] - startTime[n - i - 1] <= t2) {
                 q[n - i - 1] = true;
             }
-            t2 = Math.max(
-                t2,
-                (i == 0 ? eventTime : startTime[n - i]) - endTime[n - i - 1]
-            );
+            t2 = Math.max(t2, (i == 0 ? eventTime : startTime[n - i]) - endTime[n - i - 1]);
         }
 
         int res = 0;
