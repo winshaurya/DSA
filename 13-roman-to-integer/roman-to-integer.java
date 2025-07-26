@@ -15,7 +15,7 @@ class Solution {
             if (curr < next) {
                 result -= curr;
             } else {
-                result += curr;
+                result +=curr;
             }
         }
 
