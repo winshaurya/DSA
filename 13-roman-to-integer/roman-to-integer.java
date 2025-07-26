@@ -1,6 +1,7 @@
 import java.util.*;
 
-class Solution {
+class Solution 
+{
     public int romanToInt(String s) {
         Map<Character, Integer> map = Map.of(
             'I', 1, 'V', 5, 'X', 10,
